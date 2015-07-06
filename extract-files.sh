@@ -17,6 +17,14 @@
 DEVICE=flame
 MANUFACTURER=t2m
 
+BASE_PROPRIETARY_DEVICE_DIR=vendor/$MANUFACTURER/$DEVICE/proprietary
+PROPRIETARY_DEVICE_DIR=../../../vendor/$MANUFACTURER/$DEVICE/proprietary
+
+if [[ -d $PROPRIETARY_DEVICE_DIR ]]; then
+  echo "Vendor blobs exist, DO NOT pull from device."
+  exit 0
+fi
+
 if [[ -z "${ANDROIDFS_DIR}" ]]; then
     ANDROIDFS_DIR=../../../backup-${DEVICE}
 fi
@@ -43,9 +51,6 @@ if [[ "$DEVICE_BUILD_VERSION_SDK" -ne 19 ]]; then
     echo 3. Try building again
     exit -1
 fi
-
-BASE_PROPRIETARY_DEVICE_DIR=vendor/$MANUFACTURER/$DEVICE/proprietary
-PROPRIETARY_DEVICE_DIR=../../../vendor/$MANUFACTURER/$DEVICE/proprietary
 
 mkdir -p $PROPRIETARY_DEVICE_DIR
 
