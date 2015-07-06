@@ -17,6 +17,14 @@
 DEVICE=flame
 MANUFACTURER=t2m
 
+BASE_PROPRIETARY_DEVICE_DIR=vendor/$MANUFACTURER/$DEVICE/proprietary
+PROPRIETARY_DEVICE_DIR=../../../vendor/$MANUFACTURER/$DEVICE/proprietary
+
+if [[ -d $PROPRIETARY_DEVICE_DIR ]]; then
+  echo "Vendor blobs exist, DO NOT pull from device."
+  exit 0
+fi
+
 if [[ -z "${ANDROIDFS_DIR}" ]]; then
     ANDROIDFS_DIR=../../../backup-${DEVICE}
 fi
@@ -31,9 +39,6 @@ if [[ ! -d ../../../backup-${DEVICE}/system ]]; then
 fi
 
 echo Pulling files from ${ANDROIDFS_DIR}
-
-BASE_PROPRIETARY_DEVICE_DIR=vendor/$MANUFACTURER/$DEVICE/proprietary
-PROPRIETARY_DEVICE_DIR=../../../vendor/$MANUFACTURER/$DEVICE/proprietary
 
 mkdir -p $PROPRIETARY_DEVICE_DIR
 
