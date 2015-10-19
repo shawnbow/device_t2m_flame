@@ -50,3 +50,6 @@ PRODUCT_DEVICE := flame
 PRODUCT_BRAND := qcom
 PRODUCT_MANUFACTURER := t2m
 PRODUCT_MODEL := flame
+
+# Export path for platform preferences
+EXPORT_DEVICE_PREFS := device/t2m/flame/default-prefs
