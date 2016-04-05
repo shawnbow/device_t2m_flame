@@ -1,10 +1,5 @@
 /*
- *
- *  Copyright (c) 2013, The Linux Foundation. All rights reserved.
- *  Not a Contribution, Apache license notifications and license are retained
- *  for attribution purposes only.
- *
- * Copyright (C) 2012 The Android Open Source Project
+ * Copyright (C) 2014 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +16,10 @@
 
 #ifndef _BDROID_BUILDCFG_H
 #define _BDROID_BUILDCFG_H
-#define BTM_DEF_LOCAL_NAME   "QCOM-BTD"
-// Disables read remote device feature
-#define BTA_SKIP_BLE_READ_REMOTE_FEAT FALSE
-#define MAX_L2CAP_CHANNELS    16
-// skips conn update at conn completion
-#define BTA_BLE_SKIP_CONN_UPD  FALSE
+
+#define BTM_DEF_LOCAL_NAME   "Motorola Moto E"
+#define BTA_DISABLE_DELAY 1000 /* in milliseconds */
+#define BLUETOOTH_QCOM_SW TRUE
+#define BLUETOOTH_QCOM_LE_INTL_SCAN TRUE
+#define BTC_INCLUDED TRUE
 #endif
