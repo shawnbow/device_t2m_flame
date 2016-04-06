@@ -14,13 +14,13 @@
 # limitations under the License.
 #
 
--include vendor/motorola/condor/BoardConfigVendor.mk
+-include vendor/t2m/flame/BoardConfigVendor.mk
 
-LOCAL_PATH := device/motorola/condor
+LOCAL_PATH := device/t2m/flame
 
-BOARD_VENDOR := motorola-qcom
+BOARD_VENDOR := t2m-qcom
 
-TARGET_SPECIFIC_HEADER_PATH := $(LOCAL_PATH)/include
+#TARGET_SPECIFIC_HEADER_PATH := $(LOCAL_PATH)/include
 
 # Platform
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno302
@@ -33,6 +33,10 @@ TARGET_CPU_MEMCPY_BASE_OPT_DISABLE := true
 TARGET_ARCH := arm
 TARGET_ARCH_VARIANT := armv7-a-neon
 TARGET_CPU_VARIANT := krait
+TARGET_CPU_SMP := true
+TARGET_GLOBAL_CFLAGS += -mfpu=neon -mfloat-abi=softfp
+TARGET_GLOBAL_CPPFLAGS += -mfpu=neon -mfloat-abi=softfp
+ARCH_ARM_HAVE_TLS_REGISTER := true
 
 # Bootloader
 TARGET_BOOTLOADER_BOARD_NAME := MSM8610
@@ -41,12 +45,11 @@ TARGET_NO_BOOTLOADER := true
 # Kernel
 BOARD_KERNEL_SEPARATED_DT := true
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x01000000 --tags_offset 0x00000100
-TARGET_KERNEL_SOURCE := kernel/motorola/msm8610
-TARGET_KERNEL_CONFIG := cm_condor_defconfig
+TARGET_KERNEL_SOURCE := kernel/t2m/flame
+TARGET_KERNEL_CONFIG := msm8610_defconfig
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_PAGESIZE := 2048
-
-BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 utags.blkdev=/dev/block/platform/msm_sdcc.1/by-name/utags vmalloc=400M
+BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 androidboot.bootdevice=msm_sdcc.1 androidboot.bootloader=L1TC20011L60 androidboot.emmc=true androidboot.serialno=e477d8ec androidboot.baseband=msm mdss_mdp.panel=1:dsi:0:qcom,mdss_dsi_tianma_tm040ydh65_ili9806c_wvga_video
 
 WLAN_MODULES:
 	mkdir -p $(KERNEL_MODULES_OUT)/pronto

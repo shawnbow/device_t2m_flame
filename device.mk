@@ -19,7 +19,7 @@
 #
 # Everything in this directory will become public
 
-LOCAL_PATH := device/motorola/condor
+LOCAL_PATH := device/t2m/flame
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 
