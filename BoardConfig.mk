@@ -33,43 +33,47 @@ TARGET_CPU_MEMCPY_BASE_OPT_DISABLE := true
 TARGET_ARCH := arm
 TARGET_ARCH_VARIANT := armv7-a-neon
 TARGET_CPU_VARIANT := krait
-TARGET_CPU_SMP := true
-TARGET_GLOBAL_CFLAGS += -mfpu=neon -mfloat-abi=softfp
-TARGET_GLOBAL_CPPFLAGS += -mfpu=neon -mfloat-abi=softfp
-ARCH_ARM_HAVE_TLS_REGISTER := true
+#TARGET_CPU_SMP := true
+#TARGET_USE_QCOM_BIONIC_OPTIMIZATION := true
+#ARCH_ARM_HAVE_TLS_REGISTER := true
 
 # Bootloader
 TARGET_BOOTLOADER_BOARD_NAME := MSM8610
 TARGET_NO_BOOTLOADER := true
+TARGET_NO_RADIOIMAGE := true
 
 # Kernel
+TARGET_NO_KERNEL := false
 BOARD_KERNEL_SEPARATED_DT := true
-BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x01000000 --tags_offset 0x00000100
+BOARD_KERNEL_BASE        := 0x00000000
+BOARD_KERNEL_PAGESIZE    := 2048
+BOARD_KERNEL_TAGS_OFFSET := 0x01E00000
+BOARD_RAMDISK_OFFSET     := 0x02000000
+BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x02000000 --tags_offset 0x01E00000
 TARGET_KERNEL_SOURCE := kernel/t2m/flame
 TARGET_KERNEL_CONFIG := msm8610_defconfig
-BOARD_KERNEL_BASE := 0x00000000
-BOARD_KERNEL_PAGESIZE := 2048
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 androidboot.bootdevice=msm_sdcc.1 androidboot.bootloader=L1TC20011L60 androidboot.emmc=true androidboot.serialno=e477d8ec androidboot.baseband=msm mdss_mdp.panel=1:dsi:0:qcom,mdss_dsi_tianma_tm040ydh65_ili9806c_wvga_video
 
-WLAN_MODULES:
-	mkdir -p $(KERNEL_MODULES_OUT)/pronto
-	mv $(KERNEL_MODULES_OUT)/wlan.ko $(KERNEL_MODULES_OUT)/pronto/pronto_wlan.ko
-	ln -sf /system/lib/modules/pronto/pronto_wlan.ko $(TARGET_OUT)/lib/modules/wlan.ko
+#WLAN_MODULES:
+#	mkdir -p $(KERNEL_MODULES_OUT)/pronto
+#	mv $(KERNEL_MODULES_OUT)/wlan.ko $(KERNEL_MODULES_OUT)/pronto/pronto_wlan.ko
+#	ln -sf /system/lib/modules/pronto/pronto_wlan.ko $(TARGET_OUT)/lib/modules/wlan.ko
 
-TARGET_KERNEL_MODULES += WLAN_MODULES
+#TARGET_KERNEL_MODULES += WLAN_MODULES
 
 # Lights
-TARGET_PROVIDES_LIBLIGHT := true
+#TARGET_PROVIDES_LIBLIGHT := true
 
 # GPS
 TARGET_NO_RPC := true
 
-# Use qcom power hal
+# Power
 TARGET_POWERHAL_VARIANT := qcom
+BOARD_CHARGER_ENABLE_SUSPEND := true
 
 # Global flags
-COMMON_GLOBAL_CFLAGS += -DMOTOROLA_UIDS -DQCOM_HARDWARE
-TARGET_USES_MOTOROLA_LOG := true
+TARGET_GLOBAL_CFLAGS += -mfpu=neon -mfloat-abi=softfp
+TARGET_GLOBAL_CPPFLAGS += -mfpu=neon -mfloat-abi=softfp
 TARGET_NR_SVC_SUPP_GIDS := 32
 
 # Display
@@ -79,6 +83,7 @@ NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
 OVERRIDE_RS_DRIVER := libRSDriver_adreno.so
 MAX_EGL_CACHE_KEY_SIZE := 12*1024
 MAX_EGL_CACHE_SIZE := 2048*1024
+BOARD_EGL_CFG := device/t2m/flame/egl.cfg
 
 # Wifi
 BOARD_HAS_QCOM_WLAN := true
@@ -97,13 +102,20 @@ AUDIO_FEATURE_ENABLED_FM := true
 AUDIO_FEATURE_ENABLED_MULTI_VOICE_SESSIONS := true
 AUDIO_FEATURE_ENABLED_NEW_SAMPLE_RATE := true
 AUDIO_FEATURE_LOW_LATENCY_PRIMARY := true
+TARGET_QCOM_AUDIO_VARIANT := caf
+
+# Camera 
+USE_CAMERA_STUB := false
+TARGET_USE_VENDOR_CAMERA_EXT := true
 
 # FM
 TARGET_QCOM_NO_FM_FIRMWARE := true
+TARGET_USES_AOSP := false
 
 # Qualcomm support
 BOARD_USES_QCOM_HARDWARE := true
 BOARD_USES_QC_TIME_SERVICES := true
+TARGET_QCOM_MEDIA_VARIANT := caf
 
 # Hardware tunables framework
 BOARD_HARDWARE_CLASS := $(LOCAL_PATH)/cmhw/
@@ -119,14 +131,16 @@ TARGET_SYSTEMIMAGE_USE_SQUISHER := true
 
 # Storage & partiiton
 TARGET_USERIMAGES_USE_EXT4 := true
-TARGET_USERIMAGES_USE_F2FS := true
-BOARD_BOOTIMAGE_PARTITION_SIZE := 10444800
-BOARD_RECOVERYIMAGE_PARTITION_SIZE := 10526720
-BOARD_SYSTEMIMAGE_PARTITION_SIZE := 939524096
-BOARD_USERDATAIMAGE_PARTITION_SIZE := 2356543488
-BOARD_CACHEIMAGE_PARTITION_SIZE := 476184576
+#TARGET_USERIMAGES_USE_F2FS := true
+BOARD_BOOTIMAGE_PARTITION_SIZE := 16777216
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := 16777216
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 838860800
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 6140443648
+BOARD_CACHEIMAGE_PARTITION_SIZE := 104857600
+BOARD_PERSISTIMAGE_PARTITION_SIZE := 33554432
 BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
-BOARD_FLASH_BLOCK_SIZE := 131072
+BOARD_PERSISTIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 64)
 
 # Vold
 BOARD_VOLD_DISC_HAS_MULTIPLE_MAJORS := true
@@ -135,25 +149,23 @@ BOARD_VOLD_MAX_PARTITIONS := 40
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/msm_hsusb/gadget/lun%d/file
 
 # Asserts
-TARGET_OTA_ASSERT_DEVICE := xt1021,xt1022,xt1023,condor_umts,condor_umtsds,condor
+TARGET_OTA_ASSERT_DEVICE := flame
 
 # Init
 TARGET_INIT_VENDOR_LIB := libinit_msm
-TARGET_LIBINIT_DEFINES_FILE := $(LOCAL_PATH)/init/init_condor.c
-TARGET_UNIFIED_DEVICE := true
 
 # Recovery
 TARGET_RECOVERY_FSTAB := $(LOCAL_PATH)/ramdisk/fstab.qcom
 BOARD_HAS_NO_SELECT_BUTTON := true
-HAVE_SELINUX := true
 
 # SELinux
-include device/qcom/sepolicy/sepolicy.mk
+HAVE_SELINUX := false
+#include device/qcom/sepolicy/sepolicy.mk
 
-BOARD_SEPOLICY_DIRS += \
-    device/motorola/condor/sepolicy
+#BOARD_SEPOLICY_DIRS += \
+    device/t2m/flame/sepolicy
 
-BOARD_SEPOLICY_UNION += \
+#BOARD_SEPOLICY_UNION += \
     atvc.te \
     batt_health.te \
     device.te \
@@ -181,14 +193,14 @@ BOARD_SEPOLICY_UNION += \
 MALLOC_IMPL := dlmalloc
 
 # Enable dex-preoptimization to speed up first boot sequence
-ifeq ($(HOST_OS),linux)
-  ifeq ($(call match-word-in-list,$(TARGET_BUILD_VARIANT),user),true)
-    ifeq ($(WITH_DEXPREOPT),)
-      WITH_DEXPREOPT := true
-      WITH_DEXPREOPT_BOOT_IMG_ONLY := false
-    endif
-  endif
-endif
+#ifeq ($(HOST_OS),linux)
+#  ifeq ($(call match-word-in-list,$(TARGET_BUILD_VARIANT),user),true)
+#    ifeq ($(WITH_DEXPREOPT),)
+#      WITH_DEXPREOPT := true
+#      WITH_DEXPREOPT_BOOT_IMG_ONLY := false
+#    endif
+#  endif
+#endif
 
 # Include an expanded selection of fonts
 EXTENDED_FONT_FOOTPRINT := true

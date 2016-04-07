@@ -14,8 +14,8 @@
 # limitations under the License.
 #
 
-# This file includes all definitions that apply to ALL condor devices, and
-# are also specific to condor devices
+# This file includes all definitions that apply to ALL flame devices, and
+# are also specific to flame devices
 #
 # Everything in this directory will become public
 
@@ -106,10 +106,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     libQWiFiSoftApCfg
 
-# Motorola
-PRODUCT_PACKAGES += \
-    charge_only_mode
-
 # Misc
 PRODUCT_PACKAGES += \
     libxml2
@@ -177,10 +173,6 @@ PRODUCT_PACKAGES += \
     wpa_supplicant.conf \
     dhcpcd.conf
 
-# Doze
-PRODUCT_PACKAGES += \
-    MotoDoze
-
 PRODUCT_PACKAGES += \
     WCNSS_qcom_wlan_factory_nv.bin
 
@@ -191,7 +183,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.hwc.mdpcomp.enable=true
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.opendelta.device=condor \
+    ro.opendelta.device=flame \
     persist.sys.logkit.ctrlcode=0 \
     ro.vendor.extension_library=/vendor/lib/libqc-opt.so \
     ro.usb.mtp=0x2e82 \
@@ -223,11 +215,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # set default USB configuration
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     persist.sys.usb.config=mtp
-
-# Prima(pronto firmware)
-PRODUCT_COPY_FILES += \
-    kernel/motorola/msm8610/drivers/staging/prima/firmware_bin/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat \
-    kernel/motorola/msm8610/drivers/staging/prima/firmware_bin/WCNSS_qcom_cfg.ini:system/etc/firmware/wlan/prima/WCNSS_qcom_cfg.ini
 
 # Inhert dalvik heap values from aosp
 $(call inherit-product, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)

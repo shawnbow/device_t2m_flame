@@ -20,7 +20,7 @@
 # Inherit from those products. Most specific first.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
-# Inherit from condor device
+# Inherit from flame device
 $(call inherit-product, device/t2m/flame/device.mk)
 
 PRODUCT_NAME := full_flame
