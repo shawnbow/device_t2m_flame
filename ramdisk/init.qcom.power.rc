@@ -45,7 +45,7 @@ on property:ro.bootmode=mot-charger
     write /sys/module/lpm_levels/enable_low_power/l2 3
     write /sys/class/leds/lcd-backlight/brightness 255
     write /sys/module/msm_pm/modes/cpu0/power_collapse/idle_enabled 0
-    exec /system/bin/charge_only_mode
+    # exec /system/bin/charge_only_mode
     write /sys/devices/system/cpu/cpu1/online 1
 
 on property:init.svc.bootanim=running

@@ -54,10 +54,11 @@ TARGET_KERNEL_SOURCE := kernel/t2m/flame
 TARGET_KERNEL_CONFIG := msm8610_defconfig
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 androidboot.bootdevice=msm_sdcc.1 androidboot.bootloader=L1TC20011L60 androidboot.emmc=true androidboot.serialno=e477d8ec androidboot.baseband=msm mdss_mdp.panel=1:dsi:0:qcom,mdss_dsi_tianma_tm040ydh65_ili9806c_wvga_video
 
-#WLAN_MODULES:
-#	mkdir -p $(KERNEL_MODULES_OUT)/pronto
-#	mv $(KERNEL_MODULES_OUT)/wlan.ko $(KERNEL_MODULES_OUT)/pronto/pronto_wlan.ko
-#	ln -sf /system/lib/modules/pronto/pronto_wlan.ko $(TARGET_OUT)/lib/modules/wlan.ko
+WLAN_MODULES:
+	mkdir -p $(KERNEL_MODULES_OUT)/pronto
+	make -C kernel/t2m/flame M=../../../$(TARGET_DEVICE_DIR)/prima O=$(KERNEL_MODULES_OUT) ARCH=arm CROSS_COMPILE=arm-eabi- modules WLAN_ROOT=../../../$(TARGET_DEVICE_DIR)/prima MODNAME=wlan BOARD_PLATFORM=msm8610 CONFIG_PRONTO_WLAN=m
+	mv $(KERNEL_MODULES_OUT)/wlan.ko $(KERNEL_MODULES_OUT)/pronto/pronto_wlan.ko
+	ln -sf /system/lib/modules/pronto/pronto_wlan.ko $(TARGET_OUT)/lib/modules/wlan.ko
 
 #TARGET_KERNEL_MODULES += WLAN_MODULES
 
