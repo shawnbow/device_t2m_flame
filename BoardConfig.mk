@@ -56,11 +56,12 @@ BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 an
 
 WLAN_MODULES:
 	mkdir -p $(KERNEL_MODULES_OUT)/pronto
-	make -C kernel/t2m/flame M=../../../$(TARGET_DEVICE_DIR)/prima O=$(KERNEL_MODULES_OUT) ARCH=arm CROSS_COMPILE=arm-eabi- modules WLAN_ROOT=../../../$(TARGET_DEVICE_DIR)/prima MODNAME=wlan BOARD_PLATFORM=msm8610 CONFIG_PRONTO_WLAN=m
-	mv $(KERNEL_MODULES_OUT)/wlan.ko $(KERNEL_MODULES_OUT)/pronto/pronto_wlan.ko
-	ln -sf /system/lib/modules/pronto/pronto_wlan.ko $(TARGET_OUT)/lib/modules/wlan.ko
+	$(MAKE) -C kernel/t2m/flame O=$(KERNEL_OUT) M=$(ANDROID_BUILD_TOP)/device/t2m/flame/prima ARCH=arm CROSS_COMPILE=arm-eabi- modules WLAN_ROOT=$(ANDROID_BUILD_TOP)/device/t2m/flame/prima MODNAME=wlan BOARD_PLATFORM=msm8610 CONFIG_PRONTO_WLAN=m
+	$(KERNEL_TOOLCHAIN_PATH)strip --strip-unneeded device/t2m/flame/prima/wlan.ko
+	mv device/t2m/flame/prima/wlan.ko $(KERNEL_MODULES_OUT)/pronto/pronto_wlan.ko
+	ln -sf /system/lib/modules/pronto/pronto_wlan.ko $(KERNEL_MODULES_OUT)/wlan.ko
 
-#TARGET_KERNEL_MODULES += WLAN_MODULES
+TARGET_KERNEL_MODULES += WLAN_MODULES
 
 # Lights
 #TARGET_PROVIDES_LIBLIGHT := true
